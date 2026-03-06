@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Home Hub — Group 5</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Admin Login Screen -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-box">
+      <span class="login-tag">// Authentication</span>
+      <div class="login-title">GROUP 2 <span>LOGIN</span></div>
+      <div class="login-form">
+        <input type="password" id="adminPassword" class="login-input" placeholder="Enter admin password">
+        <button class="login-btn" onclick="checkLogin()">▶ LOGIN</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top header -->
+  <header class="site-header">
+    <div class="status-dot online" id="statusDot"></div>
+    <span class="sys-label">SYS // NodeMCU ESP8266</span>
+    <span class="timestamp" id="clock">--:--:--</span>
+  </header>
+
+  <!-- Dashboard -->
+  <main class="dashboard">
+
+    <!-- Network Status -->
+    <div class="panel">
+      <div class="panel-inner">
+        <span class="tag">// System</span>
+        <div class="panel-title">NETWORK <span>STATUS</span></div>
+
+        <div class="network-status">
+          <div class="status-dot online"></div>
+          <span class="net-label">ONLINE &amp; ACTIVE</span>
+        </div>
+
+        <div class="info-row">
+          <span>DEVICE</span><span class="val">NodeMCU v1.0</span>
+        </div>
+        <div class="info-row">
+          <span>IP ADDR</span><span class="val">192.168.4.1</span>
+        </div>
+        <div class="info-row">
+          <span>MODE</span><span class="val">ACCESS POINT</span>
+        </div>
+        <div class="info-row">
+          <span>SIGNAL</span><span class="val signal-strong">─────── STRONG</span>
+        </div>
+
+        <div class="divider"></div>
+        <div class="log-feed" id="logFeed"></div>
+      </div>
+    </div>
+
+    <!-- Room Controls -->
+    <div class="panel">
+      <div class="panel-inner">
+        <span class="tag">// Lighting Hub</span>
+        <div class="panel-title">ROOM <span>CONTROLS</span></div>
+
+        <div class="device-row">
+          <div class="device-info">
+            <h3>LIVING ROOM</h3>
+            <p>GPIO PIN</p>
+            <div class="pin-badge" id="badge-living_room">D1 // OFF</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="toggle-living_room" onchange="toggleDevice('living_room', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="device-row">
+          <div class="device-info">
+            <h3>BEDROOM</h3>
+            <p>GPIO PIN</p>
+            <div class="pin-badge" id="badge-bedroom">D2 // OFF</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="toggle-bedroom" onchange="toggleDevice('bedroom', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="controls-stats">
+          <div>
+            <div class="stat-label">ACTIVE</div>
+            <div class="stat-value" id="activeCount">0</div>
+          </div>
+          <div>
+            <div class="stat-label">LAST CMD</div>
+            <div class="stat-value stat-small" id="lastCmd">--:--</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Brightness -->
+    <div class="panel">
+      <div class="panel-inner">
+        <span class="tag">// Atmosphere</span>
+        <div class="panel-title">BRIGHTNESS <span>PWM</span></div>
+
+        <div class="brightness-display">
+          <span class="bright-num" id="brightPct">50</span>
+          <span class="bright-unit">%</span>
+        </div>
+        <div class="bright-raw" id="brightRaw">PWM VALUE // 127 / 255</div>
+
+        <input type="range" min="0" max="255" value="127"
+               oninput="updateBrightness(this.value)" id="brightSlider">
+
+        <div class="bright-bar-wrap">
+          <div class="bright-bar-fill" id="brightBar" style="width:50%"></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="pwm-stats">
+          <div class="pwm-stat">
+            <div class="stat-label">MIN</div>
+            <div class="stat-value stat-dim">0</div>
+          </div>
+          <div class="pwm-divider"></div>
+          <div class="pwm-stat">
+            <div class="stat-label">CURRENT</div>
+            <div class="stat-value" id="brightMid">127</div>
+          </div>
+          <div class="pwm-divider"></div>
+          <div class="pwm-stat">
+            <div class="stat-label">MAX</div>
+            <div class="stat-value stat-dim">255</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" onclick="toggleModal()">
+    <div class="footer-tag">// Laboratory Activity No. 1</div>
+    <div class="footer-main">GROUP 5 — Controlling an LED Using NodeMCU over Wi-Fi</div>
+  </footer>
+
+  <!-- Team Modal -->
+  <div class="modal-overlay" id="teamModal" onclick="closeOutside(event)">
+    <div class="modal-panel">
+      <div class="modal-inner">
+        <span class="tag">// Team Members</span>
+        <div class="panel-title modal-group-title">GROUP <span>FIVE</span></div>
+        <ul class="team-list">
+          <li>Balangao, Samantha A.</li>
+          <li>De Leon, Rose Denise J.</li>
+          <li>Ernia, Franchesca Jean N.</li>
+          <li>Herras, Trixie Mae E.</li>
+          <li>Legaspi, Lana Cazandra U.</li>
+          <li>Malabo, Reniel A.</li>
+          <li>Perez, Lea Nikka F.</li>
+          <li>Ronio, Ryza Mae P.</li>
+          <li>Zurbito, Pierre Victor T.</li>
+        </ul>
+        <button class="close-btn" onclick="toggleModal()">▶ CLOSE WINDOW</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
