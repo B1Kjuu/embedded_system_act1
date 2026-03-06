@@ -160,6 +160,34 @@
   75% { transform: translateX(5px); }
 }
 
+/* ── Login Mobile Responsive ────────────────────────────── */
+
+@media (max-width: 500px) {
+  .login-box {
+    width: 90%;
+    max-width: 400px;
+    padding: 28px 24px;
+  }
+
+  .login-form {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .login-input {
+    width: 100%;
+  }
+
+  .login-btn {
+    width: 100%;
+    padding: 14px 28px;
+  }
+
+  .login-title {
+    font-size: 14px;
+  }
+}
+
 body {
   background: var(--bg);
   color: var(--text);
