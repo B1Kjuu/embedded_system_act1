@@ -23,6 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+function logout() {
+  document.getElementById('loginOverlay').classList.remove('hidden');
+  document.getElementById('adminPassword').focus();
+}
+
 // ── Firebase Configuration ─────────────────────────────────
 const firebaseConfig = {
   apiKey: "AIzaSyA-VDuKUAk57A1W58zj6M7ZQOii6WrrrB4",
@@ -50,9 +55,14 @@ updateClock();
 setInterval(updateClock, 1000);
 
 // ── Log Feed ───────────────────────────────────────────────
+const logHistory = [];
+
 function addLog(msg, isEvent = false) {
   const feed = document.getElementById('logFeed');
   const ts   = formatTime12h(new Date());
+
+  // Store in history
+  logHistory.unshift({ ts, msg, isEvent });
 
   const line = document.createElement('div');
   line.className = 'log-line' + (isEvent ? ' event' : '');
@@ -77,8 +87,11 @@ database.ref('/living_room').on('value', (snapshot) => {
     if (toggle.checked !== state) {
       toggle.checked = state;
       const badge = document.getElementById('badge-living_room');
+      const deviceRow = badge.closest('.device-row');
       badge.textContent = 'D1 // ' + (state ? 'ON' : 'OFF');
       badge.classList.toggle('active', state);
+      deviceRow.classList.toggle('active', state);
+      deviceRow.classList.toggle('dimmed', !state);
     }
   }
 });
@@ -90,8 +103,11 @@ database.ref('/bedroom').on('value', (snapshot) => {
     if (toggle.checked !== state) {
       toggle.checked = state;
       const badge = document.getElementById('badge-bedroom');
+      const deviceRow = badge.closest('.device-row');
       badge.textContent = 'D2 // ' + (state ? 'ON' : 'OFF');
       badge.classList.toggle('active', state);
+      deviceRow.classList.toggle('active', state);
+      deviceRow.classList.toggle('dimmed', !state);
     }
   }
 });
@@ -122,6 +138,7 @@ const pinMap = {
 function toggleDevice(pin, state) {
   const badge = document.getElementById('badge-' + pin);
   const gpioPin = pinMap[pin] || pin;
+  const deviceRow = badge.closest('.device-row');
 
   // Write to Firebase
   database.ref('/' + pin).set(state)
@@ -135,11 +152,15 @@ function toggleDevice(pin, state) {
   if (state) {
     badge.textContent = gpioPin + ' // ON';
     badge.classList.add('active');
+    deviceRow.classList.remove('dimmed');
+    deviceRow.classList.add('active');
     activeDevices++;
     addLog('PIN ' + gpioPin + ' → HIGH', true);
   } else {
     badge.textContent = gpioPin + ' // OFF';
     badge.classList.remove('active');
+    deviceRow.classList.remove('active');
+    deviceRow.classList.add('dimmed');
     activeDevices = Math.max(0, activeDevices - 1);
     addLog('PIN ' + gpioPin + ' → LOW');
   }
@@ -178,5 +199,30 @@ function toggleModal() {
 function closeOutside(event) {
   if (event.target.id === 'teamModal') {
     toggleModal();
+  }
+}
+
+// ── Log History Modal ──────────────────────────────────────
+function toggleLogHistory() {
+  const modal = document.getElementById('logHistoryModal');
+  const feed = document.getElementById('logHistoryFeed');
+  
+  if (!modal.classList.contains('active')) {
+    // Populate with full history
+    feed.innerHTML = '';
+    logHistory.forEach(log => {
+      const line = document.createElement('div');
+      line.className = 'log-line' + (log.isEvent ? ' event' : '');
+      line.innerHTML = `<span class="ts">${log.ts}</span>${log.msg}`;
+      feed.appendChild(line);
+    });
+  }
+  
+  modal.classList.toggle('active');
+}
+
+function closeLogHistoryOutside(event) {
+  if (event.target.id === 'logHistoryModal') {
+    toggleLogHistory();
   }
 }

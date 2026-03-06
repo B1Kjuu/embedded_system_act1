@@ -16,6 +16,23 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+/* ── Custom Cursor ──────────────────────────────────────── */
+html, body {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%2300e5ff' d='M5 3l14 9-8 2-2 8z'/%3E%3Cpath fill='%23005566' d='M5 3l14 9-8 2z'/%3E%3C/svg%3E") 0 0, auto;
+}
+
+a, button, label, input[type="checkbox"], .switch, .site-footer, .close-btn, .login-btn, .logout-btn, .log-feed {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='8' fill='none' stroke='%2300e5ff' stroke-width='2'/%3E%3Ccircle cx='12' cy='12' r='3' fill='%2300e5ff'/%3E%3Cline x1='12' y1='2' x2='12' y2='6' stroke='%2300e5ff' stroke-width='2'/%3E%3Cline x1='12' y1='18' x2='12' y2='22' stroke='%2300e5ff' stroke-width='2'/%3E%3Cline x1='2' y1='12' x2='6' y2='12' stroke='%2300e5ff' stroke-width='2'/%3E%3Cline x1='18' y1='12' x2='22' y2='12' stroke='%2300e5ff' stroke-width='2'/%3E%3C/svg%3E") 12 12, pointer;
+}
+
+input[type="range"] {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%2300ff88' d='M8 12l4-8 4 8H8z'/%3E%3Cpath fill='%2300ff88' d='M8 12l4 8 4-8H8z'/%3E%3C/svg%3E") 12 12, ew-resize;
+}
+
+input[type="text"], input[type="password"], textarea {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Crect x='10' y='4' width='4' height='16' fill='%2300e5ff'/%3E%3Crect x='6' y='4' width='12' height='3' fill='%2300e5ff'/%3E%3Crect x='6' y='17' width='12' height='3' fill='%2300e5ff'/%3E%3C/svg%3E") 12 12, text;
+}
+
 /* ── Admin Login Overlay ────────────────────────────────── */
 
 .login-overlay {
@@ -254,6 +271,23 @@ body::after {
   letter-spacing: 1px;
 }
 
+.logout-btn {
+  background: transparent;
+  border: 1px solid var(--accent3);
+  color: var(--accent3);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  padding: 6px 14px;
+  transition: all 0.2s;
+}
+
+.logout-btn:hover {
+  background: var(--accent3);
+  color: var(--bg);
+  box-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
+}
+
 /* ── Status Dot ─────────────────────────────────────────── */
 
 .status-dot {
@@ -269,12 +303,20 @@ body::after {
 .status-dot.online {
   background: var(--accent2);
   box-shadow: 0 0 8px var(--accent2), 0 0 16px rgba(0, 255, 136, 0.5);
-  animation: pulse-dot 2s ease-in-out infinite;
+  animation: pulse-dot 1.5s ease-in-out infinite;
 }
 
 @keyframes pulse-dot {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.5; }
+  0%, 100% { 
+    opacity: 1; 
+    transform: scale(1);
+    box-shadow: 0 0 8px var(--accent2), 0 0 16px rgba(0, 255, 136, 0.5);
+  }
+  50% { 
+    opacity: 0.7; 
+    transform: scale(1.2);
+    box-shadow: 0 0 12px var(--accent2), 0 0 24px rgba(0, 255, 136, 0.7), 0 0 36px rgba(0, 255, 136, 0.3);
+  }
 }
 
 /* ── Dashboard Grid ─────────────────────────────────────── */
@@ -418,6 +460,19 @@ body::after {
   color: #fff;
   letter-spacing: 2px;
   margin-bottom: 4px;
+  transition: color 0.3s, text-shadow 0.3s;
+}
+
+/* Dimmed state when device is OFF */
+.device-row.dimmed .device-info h3 {
+  color: var(--text-dim);
+  text-shadow: none;
+}
+
+/* Active/ON state with glow */
+.device-row.active .device-info h3 {
+  color: var(--accent);
+  text-shadow: var(--glow);
 }
 
 .device-info p {
@@ -458,14 +513,14 @@ body::after {
 }
 
 input:checked + .slider {
-  background: rgba(0, 229, 255, 0.1);
+  background: rgba(0, 229, 255, 0.15);
   border-color: var(--accent);
-  box-shadow: var(--glow);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.5), 0 0 20px rgba(0, 229, 255, 0.3), 0 0 30px rgba(0, 229, 255, 0.1);
 }
 input:checked + .slider::before {
   transform: translateX(26px);
   background: var(--accent);
-  box-shadow: 0 0 8px var(--accent);
+  box-shadow: 0 0 8px var(--accent), 0 0 16px rgba(0, 229, 255, 0.6), 0 0 24px rgba(0, 229, 255, 0.3);
 }
 
 /* ── Pin Badge ──────────────────────────────────────────── */
@@ -483,7 +538,8 @@ input:checked + .slider::before {
 .pin-badge.active {
   color: var(--accent);
   border-color: var(--accent);
-  box-shadow: var(--glow);
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.5), 0 0 16px rgba(0, 229, 255, 0.3);
+  text-shadow: 0 0 6px rgba(0, 229, 255, 0.8);
 }
 
 /* ── Controls Stats ─────────────────────────────────────── */
@@ -505,7 +561,7 @@ input:checked + .slider::before {
   font-size: 20px;
   font-weight: 700;
   color: var(--accent);
-  text-shadow: var(--glow);
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.7), 0 0 16px rgba(0, 229, 255, 0.4);
 }
 
 .stat-value.stat-small {
@@ -533,7 +589,7 @@ input:checked + .slider::before {
   font-size: 40px;
   font-weight: 900;
   color: var(--accent);
-  text-shadow: var(--glow);
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.8), 0 0 20px rgba(0, 229, 255, 0.5), 0 0 40px rgba(0, 229, 255, 0.3);
   line-height: 1;
 }
 
@@ -616,6 +672,14 @@ input[type=range]::-moz-range-thumb {
   overflow: hidden;
   position: relative;
   margin-top: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+  padding: 4px;
+  margin: 8px -4px 0 -4px;
+}
+
+.log-feed:hover {
+  background: rgba(0, 229, 255, 0.05);
 }
 
 .log-feed::before {
@@ -789,4 +853,441 @@ input[type=range]::-moz-range-thumb {
   border-color: var(--accent);
   box-shadow: var(--glow);
   color: #fff;
+}
+
+/* ── Log History Modal ─────────────────────────────────── */
+
+.log-history-panel {
+  max-width: 500px;
+  width: 90%;
+}
+
+.log-history-feed {
+  max-height: 400px;
+  overflow-y: auto;
+  margin: 16px 0;
+  padding-right: 8px;
+}
+
+.log-history-feed::-webkit-scrollbar {
+  width: 4px;
+}
+
+.log-history-feed::-webkit-scrollbar-track {
+  background: var(--border);
+}
+
+.log-history-feed::-webkit-scrollbar-thumb {
+  background: var(--accent-dim);
+}
+
+.log-history-feed::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+.log-history-feed .log-line {
+  animation: none;
+}
+
+/* ══════════════════════════════════════════════════════════ */
+/* ══ RESPONSIVE DESIGN ═════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════ */
+
+/* ── Tablet (768px and below) ───────────────────────────── */
+@media (max-width: 768px) {
+  body {
+    padding: 24px 16px 60px;
+  }
+
+  .site-header {
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .sys-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+  }
+
+  .timestamp {
+    order: 3;
+    width: 100%;
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  .logout-btn {
+    margin-left: auto;
+  }
+
+  .dashboard {
+    gap: 16px;
+  }
+
+  .panel-inner {
+    padding: 20px 20px 24px;
+  }
+
+  .panel-title {
+    font-size: 14px;
+  }
+
+  .bright-num {
+    font-size: 32px;
+  }
+
+  .stat-value {
+    font-size: 18px;
+  }
+
+  .modal-inner {
+    padding: 24px;
+  }
+
+  .team-list li {
+    font-size: 11px;
+    padding: 10px 0;
+  }
+
+  .log-history-feed {
+    max-height: 300px;
+  }
+
+  .footer-main {
+    font-size: 10px;
+  }
+}
+
+/* ── Mobile (480px and below) ───────────────────────────── */
+@media (max-width: 480px) {
+  body {
+    padding: 16px 12px 50px;
+  }
+
+  .site-header {
+    gap: 6px;
+  }
+
+  .sys-label {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  .logout-btn {
+    font-size: 8px;
+    padding: 5px 10px;
+    letter-spacing: 1px;
+  }
+
+  .dashboard {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .panel-inner {
+    padding: 16px 16px 20px;
+  }
+
+  .tag {
+    font-size: 8px;
+    letter-spacing: 3px;
+  }
+
+  .panel-title {
+    font-size: 12px;
+    margin-bottom: 16px;
+  }
+
+  /* Network Status Card */
+  .network-status {
+    margin-bottom: 12px;
+  }
+
+  .net-label {
+    font-size: 10px;
+  }
+
+  .info-row {
+    font-size: 9px;
+    padding: 5px 0;
+  }
+
+  /* Device Row */
+  .device-row {
+    padding: 12px 0;
+  }
+
+  .device-info h3 {
+    font-size: 10px;
+  }
+
+  .device-info p {
+    font-size: 8px;
+  }
+
+  .pin-badge {
+    font-size: 7px;
+  }
+
+  .switch {
+    width: 44px;
+    height: 22px;
+  }
+
+  .slider::before {
+    height: 14px;
+    width: 14px;
+  }
+
+  input:checked + .slider::before {
+    transform: translateX(22px);
+  }
+
+  /* Controls Stats */
+  .controls-stats {
+    gap: 16px;
+  }
+
+  .stat-label {
+    font-size: 8px;
+  }
+
+  .stat-value {
+    font-size: 16px;
+  }
+
+  .stat-value.stat-small {
+    font-size: 11px;
+  }
+
+  .stat-value.stat-dim {
+    font-size: 12px;
+  }
+
+  /* Brightness Card */
+  .bright-num {
+    font-size: 28px;
+  }
+
+  .bright-unit {
+    font-size: 12px;
+  }
+
+  .bright-raw {
+    font-size: 8px;
+  }
+
+  input[type=range]::-webkit-slider-thumb {
+    width: 14px;
+    height: 14px;
+  }
+
+  input[type=range]::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+  }
+
+  .pwm-stats {
+    gap: 12px;
+  }
+
+  .pwm-stat .stat-label {
+    font-size: 8px;
+  }
+
+  .pwm-stat .stat-value {
+    font-size: 14px;
+  }
+
+  /* Log Feed */
+  .log-feed {
+    height: 50px;
+  }
+
+  .log-line {
+    font-size: 9px;
+  }
+
+  /* Footer */
+  .site-footer {
+    margin-top: 24px;
+  }
+
+  .footer-tag {
+    font-size: 8px;
+    letter-spacing: 2px;
+  }
+
+  .footer-main {
+    font-size: 9px;
+    letter-spacing: 1px;
+  }
+
+  /* Modals */
+  .modal-panel {
+    width: 95%;
+  }
+
+  .modal-inner {
+    padding: 20px 16px;
+  }
+
+  .modal-group-title {
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+
+  .team-list li {
+    font-size: 10px;
+    padding: 8px 0;
+  }
+
+  .close-btn {
+    font-size: 9px;
+    padding: 10px 20px;
+  }
+
+  .log-history-panel {
+    width: 95%;
+  }
+
+  .log-history-feed {
+    max-height: 250px;
+  }
+
+  .log-history-feed .log-line {
+    font-size: 9px;
+  }
+}
+
+/* ── Small Mobile (360px and below) ─────────────────────── */
+@media (max-width: 360px) {
+  body {
+    padding: 12px 8px 40px;
+  }
+
+  .site-header {
+    gap: 4px;
+  }
+
+  .sys-label {
+    display: none;
+  }
+
+  .timestamp {
+    font-size: 9px;
+    margin-left: 0;
+    flex: 1;
+    order: 0;
+    width: auto;
+    text-align: left;
+    margin-top: 0;
+  }
+
+  .logout-btn {
+    font-size: 7px;
+    padding: 4px 8px;
+  }
+
+  .panel-inner {
+    padding: 14px 12px 16px;
+  }
+
+  .panel-title {
+    font-size: 11px;
+  }
+
+  .bright-num {
+    font-size: 24px;
+  }
+
+  .stat-value {
+    font-size: 14px;
+  }
+
+  .device-info h3 {
+    font-size: 9px;
+  }
+
+  .switch {
+    width: 38px;
+    height: 20px;
+  }
+
+  .slider::before {
+    height: 12px;
+    width: 12px;
+  }
+
+  input:checked + .slider::before {
+    transform: translateX(18px);
+  }
+}
+
+/* ── Touch Device Optimization ──────────────────────────── */
+@media (hover: none) and (pointer: coarse) {
+  .switch {
+    width: 56px;
+    height: 28px;
+  }
+
+  .slider::before {
+    height: 20px;
+    width: 20px;
+  }
+
+  input:checked + .slider::before {
+    transform: translateX(28px);
+  }
+
+  .logout-btn {
+    padding: 8px 16px;
+  }
+
+  .close-btn {
+    padding: 14px 24px;
+  }
+
+  input[type=range] {
+    height: 8px;
+  }
+
+  input[type=range]::-webkit-slider-thumb {
+    width: 24px;
+    height: 24px;
+  }
+
+  input[type=range]::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* ── Landscape Mobile ───────────────────────────────────── */
+@media (max-height: 500px) and (orientation: landscape) {
+  body {
+    padding: 12px 20px 40px;
+  }
+
+  .dashboard {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .panel-inner {
+    padding: 16px;
+  }
+
+  .bright-num {
+    font-size: 28px;
+  }
+
+  .log-history-feed {
+    max-height: 150px;
+  }
 }
