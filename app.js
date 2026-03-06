@@ -33,9 +33,18 @@ firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
 // ── Clock ──────────────────────────────────────────────────
+function formatTime12h(date) {
+  let hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const seconds = date.getSeconds().toString().padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // 0 becomes 12
+  return `${hours}:${minutes}:${seconds} ${ampm}`;
+}
+
 function updateClock() {
-  document.getElementById('clock').textContent =
-    new Date().toTimeString().slice(0, 8);
+  document.getElementById('clock').textContent = formatTime12h(new Date());
 }
 updateClock();
 setInterval(updateClock, 1000);
@@ -43,7 +52,7 @@ setInterval(updateClock, 1000);
 // ── Log Feed ───────────────────────────────────────────────
 function addLog(msg, isEvent = false) {
   const feed = document.getElementById('logFeed');
-  const ts   = new Date().toTimeString().slice(0, 8);
+  const ts   = formatTime12h(new Date());
 
   const line = document.createElement('div');
   line.className = 'log-line' + (isEvent ? ' event' : '');
